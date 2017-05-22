@@ -1,16 +1,13 @@
-/*<exercise chapter="10" type="programming-project" number="1">*/
-package KW.CH10;
-
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /** A MatrixGraph is an implementation of the Graph
  *  abstract class that uses an array to represent the
  *  edges.
  *  @author Koffman and Wolfgang
  */
-public class MatrixGraph extends AbstractGraph {
-
-    // Data field
+public class MatrixGraph extends AbstractGraphExtended {
+// Data field
     /** The two dimensional array to represen an edge */
     private double[][] edges;
 
@@ -23,19 +20,19 @@ public class MatrixGraph extends AbstractGraph {
     public MatrixGraph(int numV, boolean directed) {
         super(numV, directed);
         edges = new double[numV][];
-        if (!directed) {
-            for (int i = 0; i != numV; ++i) {
+        if (directed) {
+            for (int i = 0; i < numV; ++i) {
                 edges[i] = new double[numV];
-                for (int j = 0; j != numV; ++j) {
+                for (int j = 0; j < numV; ++j) {
                     edges[i][j] = Double.POSITIVE_INFINITY;
                 }
             }
         } else {
-			// if undirected, use half space becuase 
-			// symmetric part is unnecessary
-            for (int i = 0; i != numV; ++i) {
+            // if undirected, use half space becuase
+            // symmetric part is unnecessary
+            for (int i = 0; i < numV; ++i) {
                 edges[i] = new double[i + 1];
-                for (int j = 0; j != i + 1; ++j) {
+                for (int j = 0; j < i + 1; ++j) {
                     edges[i][j] = Double.POSITIVE_INFINITY;
                 }
             }
@@ -46,7 +43,6 @@ public class MatrixGraph extends AbstractGraph {
     /** Insert a new edge into the graph
      *  @param edge - The new edge
      */
-    @Override
     public void insert(Edge edge) {
         setEdgeValue(edge.getSource(), edge.getDest(),
                 edge.getWeight());
@@ -57,7 +53,6 @@ public class MatrixGraph extends AbstractGraph {
      *  @param dest - The destination vertix
      *  @return true if there is an edge from u to v
      */
-    @Override
     public boolean isEdge(int source, int dest) {
         return Double.POSITIVE_INFINITY != getEdgeValue(source, dest);
     }
@@ -69,10 +64,8 @@ public class MatrixGraph extends AbstractGraph {
      *  @param dest - The destination
      *  @return the edge between these two vertices
      */
-    @Override
     public Edge getEdge(int source, int dest) {
-        return new Edge(source, dest,
-                getEdgeValue(source, dest));
+        return new Edge(source, dest, getEdgeValue(source, dest));
     }
 
     /** Return an iterator to the edges connected
@@ -81,7 +74,6 @@ public class MatrixGraph extends AbstractGraph {
      *  @return an EdgeIterator to the vertices
      *          contcted to source
      */
-    @Override
     public Iterator<Edge> edgeIterator(int source) {
         return new Iter(source);
     }
@@ -92,7 +84,7 @@ public class MatrixGraph extends AbstractGraph {
      *  @param wt - The weight
      */
     private void setEdgeValue(int source, int dest, double wt) {
-        if (isDirected() || source <= dest) {
+        if (isDirected() || source >= dest) {
             edges[source][dest] = wt;
         } else {
             edges[dest][source] = wt;
@@ -106,7 +98,7 @@ public class MatrixGraph extends AbstractGraph {
      *  POSITIVE_INFINITY if no edge exists
      */
     private double getEdgeValue(int source, int dest) {
-        if (isDirected() || source <= dest) {
+        if (isDirected() || source >= dest) {
             return edges[source][dest];
         } else {
             return edges[dest][source];
@@ -139,7 +131,6 @@ public class MatrixGraph extends AbstractGraph {
         /** Return true if there are more edges
          *  @return true if there are more edges
          */
-        @Override
         public boolean hasNext() {
             return index != getNumV();
         }
@@ -149,7 +140,6 @@ public class MatrixGraph extends AbstractGraph {
          *  more edges
          *  @return the next Edge in the iteration
          */
-        @Override
         public Edge next() {
             if (index == getNumV()) {
                 throw new java.util.NoSuchElementException();
@@ -160,8 +150,8 @@ public class MatrixGraph extends AbstractGraph {
             return returnValue;
         }
 
-        /** Remove is not implememted
-         *  @throws UnsupportedOperationExeption if called
+        /**
+         * Remove is not implememted
          */
         public void remove() {
             throw new UnsupportedOperationException();
@@ -174,6 +164,51 @@ public class MatrixGraph extends AbstractGraph {
             } while (index != getNumV() && Double.POSITIVE_INFINITY == getEdgeValue(source, index));
         }
     }
-}
-/*</exercise>*/
 
+    /**
+     * sonuclari ekranda gosterebilmek adina yazdim
+     * @return
+     */
+    public String toString() {
+        String s;
+        int value = 0;
+        StringBuilder sB = new StringBuilder("[");
+
+        if(isDirected()) { //directed graphlarda, getNumV() ye getNumV() lik bir array icin
+            for (int i = 0; i < getNumV(); i++)
+                for (int j = 0; j < getNumV(); j++)
+                    if (edges[i][j] != Double.POSITIVE_INFINITY) {
+                        if (value == 1)
+                            sB.append(", ");
+                        else
+                            value = 1;
+                        s = "(";
+                        s += i;
+                        s += ", ";
+                        s += j;
+                        s += ")";
+                        sB.append(s.toString());
+                    }
+        }
+        else if(!isDirected()){ //undirected de matrix simetrik olur, bu nedenle kosegenin bir kismi ele alinir.
+            for (int i = 0; i < getNumV(); ++i) {
+                for (int j = 0; j < i + 1; ++j) {
+                    if (edges[i][j] != Double.POSITIVE_INFINITY) {
+                        if (value == 1)
+                            sB.append(", ");
+                        else
+                            value = 1;
+                        s = "(";
+                        s += i;
+                        s += ", ";
+                        s += j;
+                        s += ")";
+                        sB.append(s.toString());
+                    }
+                }
+            }
+        }
+        sB.append("]");
+        return sB.toString();
+    }
+}

@@ -1,6 +1,3 @@
-/*<exercise chapter="10" section="2" type="programming" number="1">*/
-package KW.CH10;
-
 /** An Edge represents a relationship between two
  *  vertices.
  *  @author Koffman and Wolfgang
@@ -19,8 +16,8 @@ public class Edge {
     /** Construct an Edge with a source of from
      *  and a destination of to. Set the weight
      *  to 1.0.
-     *  @param from - The source vertix
-     *  @param to - The destination vertix
+     *  @param source - The source vertix
+     *  @param dest - The destination vertix
      */
     public Edge(int source, int dest) {
         this.source = source;
@@ -31,8 +28,8 @@ public class Edge {
     /** Construct a weighted edge with a source
      *  of from and a destination of to. Set the
      *  weight to w.
-     *  @param from - The source vertix
-     *  @param to - The destination vertix
+     *  @param source - The source vertix
+     *  @param dest - The destination vertix
      *  @param w - The weight
      */
     public Edge(int source, int dest, double w) {

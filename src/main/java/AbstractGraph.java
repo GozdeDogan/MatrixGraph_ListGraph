@@ -1,6 +1,3 @@
-/*<listing chapter="10" number="2">*/
-package KW.CH10;
-
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -37,7 +34,6 @@ public abstract class AbstractGraph implements Graph {
      * Return the number of vertices.
      * @return The number of vertices
      */
-    @Override
     public int getNumV() {
         return numV;
     }
@@ -46,7 +42,6 @@ public abstract class AbstractGraph implements Graph {
      * Return whether this is a directed graph.
      * @return true if this is a directed graph
      */
-    @Override
     public boolean isDirected() {
         return directed;
     }
@@ -58,7 +53,7 @@ public abstract class AbstractGraph implements Graph {
      * with two or three data values. The first is the source,
      * the second is the destination, and the optional third
      * is the weight.
-     * @param bR The buffered reader containing the data
+     * @param scan The buffered reader containing the data
      * @throws IOException if an I/O error occurs
      */
     public void loadEdgesFromFile(Scanner scan) throws IOException {
@@ -92,9 +87,7 @@ public abstract class AbstractGraph implements Graph {
      * @throws IllegalArgumentException if type is neither "Matrix"
      *                                  nor "List"
      */
-    public static Graph createGraph(Scanner scan,
-            boolean isDirected,
-            String type) throws IOException {
+    public static Graph createGraph(Scanner scan, boolean isDirected, String type) throws IOException {
         int numV = scan.nextInt();
         scan.nextLine();
         AbstractGraph returnValue = null;
@@ -105,7 +98,8 @@ public abstract class AbstractGraph implements Graph {
         } else {
             throw new IllegalArgumentException();
         }
-        returnValue.loadEdgesFromFile(scan);
+        if(scan != null)
+            returnValue.loadEdgesFromFile(scan);
         return returnValue;
     }
 }

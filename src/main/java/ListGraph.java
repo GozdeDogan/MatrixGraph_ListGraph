@@ -1,6 +1,7 @@
-/*<listing chapter="10" section="3">*/
-package KW.CH10;
-
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
  *  that uses an array of lists to represent the edges.
  *  @author Koffman and Wolfgang
  */
-public class ListGraph extends AbstractGraph {
+public class ListGraph extends AbstractGraphExtended {
 
     // Data Field
     /** An array of Lists to contain the edges that
@@ -35,7 +36,6 @@ public class ListGraph extends AbstractGraph {
      *  @param dest The destination vertex
      *  @return true if there is an edge from source to dest
      */
-    @Override
     public boolean isEdge(int source, int dest) {
         return edges[source].contains(new Edge(source, dest));
     }
@@ -43,14 +43,10 @@ public class ListGraph extends AbstractGraph {
     /** Insert a new edge into the graph.
      *  @param edge The new edge
      */
-    @Override
     public void insert(Edge edge) {
         edges[edge.getSource()].add(edge);
-        if (!isDirected()) {
-            edges[edge.getDest()].add(new Edge(edge.getDest(),
-                    edge.getSource(),
-                    edge.getWeight()));
-        }
+        if (!isDirected())
+            edges[edge.getDest()].add(new Edge(edge.getDest(), edge.getSource(), edge.getWeight()));
     }
 
     /** Return an iterator to the edges connected
@@ -59,7 +55,6 @@ public class ListGraph extends AbstractGraph {
      *  @return An Iterator<Edge> to the vertices
      *          connected to source
      */
-    @Override
     public Iterator<Edge> edgeIterator(int source) {
 		// linked list has already implements iterator so just call it
         return edges[source].iterator();
@@ -72,7 +67,6 @@ public class ListGraph extends AbstractGraph {
      *  @param dest The destination
      *  @return the edge between these two vertices
      */
-    @Override
     public Edge getEdge(int source, int dest) {
         Edge target =
                 new Edge(source, dest, Double.POSITIVE_INFINITY);
@@ -83,6 +77,33 @@ public class ListGraph extends AbstractGraph {
         }
         // Assert: All edges for source checked.
         return target; // Desired edge not found.
+    }
+
+    /**
+     * ekranda gosterebilmek adina yazdim.
+     * @return
+     */
+    public String toString(){
+        String s;
+        StringBuilder sB = new StringBuilder("[");
+        int value = 0;
+        for (int i = 0; i < getNumV(); i++) {
+            for (Edge edge : edges[i]) {
+                if (value == 1)
+                    sB.append(", ");
+                else
+                    value = 1;
+
+                s = "(";
+                s += edge.getSource();
+                s += ", ";
+                s += edge.getDest();
+                s += ")";
+                sB.append(s.toString());
+            }
+        }
+        sB.append("]");
+        return sB.toString();
     }
 }
 /*</listing>*/

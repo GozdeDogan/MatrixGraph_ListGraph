@@ -1,6 +1,3 @@
-/*<listing chapter="10" number="1">*/
-package KW.CH10;
-
 import java.util.Iterator;
 
 /** Interface to specify a Graph ADT. A graph is a set
